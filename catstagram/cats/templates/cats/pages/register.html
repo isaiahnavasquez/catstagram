@@ -2,12 +2,30 @@
 
 {% block head %}
   {% load static %}
-  <link rel="stylesheet" href="{% static 'cats/pages/create-post.css' %}">
+  <link rel="stylesheet" href="{% static 'cats/pages/register.css' %}">
 {% endblock %}
 
 
 {% block body %}
+  <div style="width:100%;text-align:center">
+    <h2 class="title">Register</h2>
+  </div>
   <div class="container">
-
+    <label for="username"><b>Username</b></label><br>
+    <input type="text" placeholder="felineconqueror" id="username"><br>
+    <label for="name"><b>Full name</b></label><br>
+    <input type="text" placeholder="Mr. Feline Jones" id="name"><br>
+    <label for="email"><b>Email Address</b></label><br>
+    <input type="text" placeholder="felinejones@gmail.com" id="email"><br>
+    <label for="bio"><b>Bio</b></label><br>
+    <input type="text" placeholder="tell me about yourself" id="bio"><br>
+    <label for="password"><b>Password</b></label><br>
+    <input type="password" placeholder="***" id="password"><br>
+    <label for="password_confirm"><b>Confirm password</b></label><br>
+    <input type="password" placeholder="***" id="password_confirm">
+    <br>
+    <div class="wrapper" style="text-align:center">
+      <a href="#" class="btn-primary">register</a>
+    </div>
   </div>
 {% endblock %}
