@@ -1,0 +1,45 @@
+:root {
+  font-family: var(--font-primary);
+}
+
+.title {
+  color: var(--primary-800);
+  font-family: var(--font-primary);
+  text-align: center;
+  margin-top: 100px;
+}
+
+.subtitle {
+  color: grey;
+  text-align: center;
+  margin-top: -15px;
+}
+
+.container {
+  background-color: var(--container-bg);
+  width: 250px;
+  padding: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 15px;
+}
+
+.wrapper {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+label {
+  color: var(--primary-800)
+}
+
+input {
+  border-bottom: 2px solid var(--primary-100);
+  padding: 10px;
+  color: grey;
+}
+
+input:focus {
+  border-bottom: 2px solid var(--primary-500);
+}

@@ -1,0 +1,21 @@
+{% extends 'cats/base/master.html' %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'cats/pages/index.css' %}">
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block body %}
+  <h1 class="title">Catstagram</h1>
+  <p class="subtitle">Solely feline</p>
+  <div class="container">
+    <div class="wrapper">
+      <label for="username">Username</label><br>
+      <input id="username" type="text"><br><br>
+      <label for="password">Password</label><br>
+      <input id="password" type="password">
+    </div>
+  </div>
+{% endblock %}

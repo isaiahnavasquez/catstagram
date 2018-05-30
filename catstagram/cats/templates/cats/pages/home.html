@@ -1,0 +1,60 @@
+{% extends 'cats/base/master.html' %}
+
+{% block head %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'cats/pages/home.css' %}">
+{% endblock %}
+
+{% block body %}
+
+  {% block tabs %}
+    <br>
+    <div class="tabs">
+      <div class="tab">
+        <h3 class="selected">Home</h3>
+      </div>
+      <div class="tab">
+        <h3>Profile</h3>
+      </div>
+    </div><br><br>
+  {% endblock %}
+
+  {% block content %}
+  <div class="wrapper">
+    <div class="container">
+      <div class="post">
+        <div class="post-header">
+          <div class="profile"></div>
+          <div class="username">@isaiahnavasquez</div>
+        </div>
+        <div class="post-image"></div>
+        <div class="content">
+          <h4 style="margin:0">0 likes</h4>
+          <p class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+      </div>
+      <div class="post">
+        <div class="post-header">
+          <div class="profile"></div>
+          <div class="username">@isaiahnavasquez</div>
+        </div>
+        <div class="post-image"></div>
+        <div class="content">
+          <h4 style="margin:0">0 likes</h4>
+          <p class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="profile"></div>
+      <h2 class="username">@isaiahnavasquez</h2>
+      <p class="bio">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <br>
+      <a href="#" class="btn-primary">Add Post</a>
+      <a href="#" class="btn-secondary">Edit Profile</a>
+    </div>
+  </div>
+  {% endblock %}
+
+
+{% endblock %}

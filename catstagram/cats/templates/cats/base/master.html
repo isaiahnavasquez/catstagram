@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'cats/main.css' %}">
+    <meta charset="utf-8">
+    <title>Catstagram</title>
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+
+    {% block header %}
+      <div class="header">
+        <h1 class="title">Catstagram</h1>
+      </div>
+      <div style="height:65px;width:100%"></div>
+    {% endblock %}
+
+    {% block body %}{% endblock %}
+
+  </body>
+</html>

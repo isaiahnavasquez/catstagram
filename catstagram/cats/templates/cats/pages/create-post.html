@@ -1,0 +1,19 @@
+{% extends 'cats/base/master.html' %}
+
+{% block head %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'cats/pages/create-post.css' %}">
+{% endblock %}
+
+
+{% block body %}
+  <div class="container">
+    <div class="image"></div>
+    <div class="add-file"></div>
+
+    <label for="caption"><h3>Caption</h3> </label>
+    <textarea name="name" id="caption" placeholder="say something about your cat..."></textarea>
+    <br><br>
+    <a href="#" class="btn-primary">Upload</a>
+  </div>
+{% endblock %}

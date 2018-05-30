@@ -1,0 +1,90 @@
+:root {
+  font-family: var(--font-primary);
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+}
+
+.tab {
+  color: gray;
+  margin: 20px;
+  border-radius: 2px;
+}
+
+.tab h3 {
+  margin: 0;
+  padding-bottom: 8px;
+}
+
+.tab .selected {
+  border-bottom: 3px solid var(--secondary-800);
+}
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: gray;
+}
+
+.sidebar {
+  width: 300px;
+  margin-left: 50px;
+  text-align: center;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.sidebar .profile {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  background-color: var(--primary-800);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container {
+  width: 400px;
+  border-radius: 2px;
+  margin-bottom: 20px;
+  /* box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); */
+}
+
+.container .post {
+  background-color: var(--container-bg);
+  margin-bottom: 20px;
+}
+
+.container .post-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.container .profile {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: var(--header-bg);
+}
+
+.container .username {
+  margin-left: 10px;
+  color: var(--secondary-800);
+}
+
+.container .post-image {
+  background-color: var(--header-bg);
+  height: 300px;
+  width: 400px;
+  margin: 10px 0;
+}
+
+.container .content {
+  color: var(--font-color-primary);
+  padding: 10px;
+}
