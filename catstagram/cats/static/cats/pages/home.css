@@ -88,3 +88,15 @@
   color: var(--font-color-primary);
   padding: 10px;
 }
+
+#caption {
+  height: 20px;
+  width: 365px;
+  padding: 5px;
+  color: gray;
+  background-color: var(--container-bg);
+}
+
+#caption:focus {
+  border-bottom: 1px solid var(--secondary-800);
+}
