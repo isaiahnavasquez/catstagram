@@ -46,9 +46,6 @@ class ProfileView(TemplateView):
         context['profile'] = get_object_or_404(User, username=username)
         return context
 
-class EditProfileView(TemplateView):
-    template_name = 'cats/pages/edit-profile.html'
-
 class CreatePost(TemplateView):
     template_name = 'cats/pages/create-post.html'
 
@@ -64,6 +61,52 @@ class CreatePost(TemplateView):
         post.save()
         return HttpResponseRedirect(reverse('cats:home'))
 
+class EditProfileView(TemplateView):
+    template_name = 'cats/pages/edit-profile.html'
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        profile = get_object_or_404(Profile, user=user)
+        info = {
+            'username': user.username,
+            'f_name': user.first_name,
+            'email': user.email,
+            'bio': profile.bio
+        }
+        form = RegistrationForm(info)
+        context = super().get_context_data(**kwargs)
+        context['form'] = form
+        return context
+
+    def post(self, *args, **kwargs):
+        form = RegistrationForm(self.request.POST)
+
+        def return_error():
+            return render(self.request, 'cats/pages/edit-profile.html', {
+                                'form': form,
+                                'password_error': 'Password Mismatch' })
+
+        if form.is_valid():
+            user = self.request.user
+            profile = get_object_or_404(Profile, user=user)
+            user.username = self.request.POST['username']
+            user.first_name = self.request.POST['f_name']
+            user.email = self.request.POST['email']
+            profile.bio = self.request.POST['bio']
+            if self.request.POST['password']:
+                if self.request.POST['password'] == self.request.POST['password_confirm']:
+                    user.password = self.request.POST['password']
+                else:
+                    return return_error()
+            if self.request.FILES['image']:
+                profile.profile_picture = self.request.FILES['image']
+            user.save()
+            profile.save()
+            return HttpResponseRedirect(reverse('cats:home'))
+        else:
+            return return_error()
+
+
 class RegisterView(TemplateView):
     template_name = 'cats/pages/register.html'
 
@@ -78,13 +121,13 @@ class RegisterView(TemplateView):
             user = User()
             profile = Profile()
             user.username = self.request.POST['username']
-            user.f_name = self.request.POST['f_name']
+            user.first_name = self.request.POST['f_name']
             user.email = self.request.POST['email']
             profile.bio = self.request.POST['bio']
-            user.password = self.request.POST['password']
             user.save()
             profile.user = user
             profile.save()
+            user.password = self.request.POST['password']
             login(self.request, user)
             return HttpResponseRedirect(reverse('cats:home'))
         else:

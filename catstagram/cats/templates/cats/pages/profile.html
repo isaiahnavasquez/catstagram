@@ -20,7 +20,7 @@
 
 {% block content %}
   <div class="profile-content">
-    <div class="profile"></div>
+    <img src="{{ profile.profile.profile_picture.url }}" class="profile">
     <h3>@{{ profile.username }}</h3>
     <p class="bio">{{ profile.profile.bio }}</p>
     <br>

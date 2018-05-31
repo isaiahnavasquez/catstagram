@@ -1,0 +1,7 @@
+.profile-image {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  background-color: var(--secondary-800);
+  margin: 20px 0;
+}
