@@ -39,7 +39,7 @@
       {% endfor %}
     </div>
     <div class="sidebar">
-      <div class="profile"></div>
+      <img src="{{ user.profile.profile_picture.url }}" class="profile"/>
       <h2 class="username">@{{ user.username }}</h2>
       <p class="bio">{{ user.profile.bio }}</p>
       <br>

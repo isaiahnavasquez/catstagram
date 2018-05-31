@@ -12,7 +12,7 @@
     {% block header %}
       <div class="header">
         <h1 class="title">Catstagram</h1>
-        <div class="more-profile">
+        <div class="more-profile" style="background:url('{{ user.profile.profile_picture.url }}') top center / 50px 50px">
           <div class="more-content">
             <p><b>@isaiahnavasquez</b></p>
             <a href="{% url 'cats:logout' %}" class="btn-secondary" style="margin-top:10px">logout</a>
