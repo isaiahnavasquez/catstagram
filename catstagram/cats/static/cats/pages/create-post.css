@@ -7,7 +7,14 @@
   margin: 20px auto;
 }
 
-.image {
+img {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+
   background-color: var(--container-bg);
   height: 300px;
   width: 300px;
@@ -23,6 +30,7 @@
   margin-left: auto;
   margin-right: 30px;
   margin-top: -45px;
+  position: relative;
 }
 
 #caption {

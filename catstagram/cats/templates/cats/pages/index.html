@@ -8,21 +8,28 @@
 {% block header %}{% endblock %}
 
 {% block body %}
-  <h1 class="title">Catstagram</h1>
-  <p class="subtitle">Solely felines</p>
-  <div class="container">
-    <div class="wrapper">
-      <label for="username">Username</label><br>
-      <input id="username" type="text"><br><br>
-      <label for="password">Password</label><br>
-      <input id="password" type="password">
+  <form class="" action="{% url 'cats:login' %}" method="post">
+    {% csrf_token %}
+    <h1 class="title">Catstagram</h1>
+    <p class="subtitle">Solely felines</p>
+    <div class="container">
+      <div class="wrapper">
+        <label for="username">Username</label><br>
+        <input id="username" type="text" name="username"><br><br>
+        <label for="password">Password</label><br>
+        <input id="password" type="password" name="password">
+        <div style="width:100%;text-align:center;">
+          <br>
+          <button type="submit" class="btn-primary">Login</button>
+        </div>
+      </div>
     </div>
-  </div>
-  <br><br><br>
-  <p class="subtitle">No account yet?</p>
-  <p class="subtitle">Come explore the world of lovely felines</p>
-  <div style="width:100%;text-align:center;">
-    <br>
-    <a href="#" class="btn-primary">Register</a>
-  </div>
+    <br><br><br>
+    <p class="subtitle">No account yet?</p>
+    <p class="subtitle">Come explore the world of lovely felines</p>
+    <div style="width:100%;text-align:center;">
+      <br>
+      <a href="{% url 'cats:register' %}" class="btn-primary">Register</a>
+    </div>
+  </form>
 {% endblock %}

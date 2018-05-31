@@ -8,9 +8,12 @@
 }
 
 .tab {
-  color: gray;
   margin: 20px;
   border-radius: 2px;
+}
+
+.tab a {
+  color: gray;
 }
 
 .tab h3 {

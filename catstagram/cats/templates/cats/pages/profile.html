@@ -10,10 +10,10 @@
   <br>
   <div class="tabs">
     <div class="tab">
-      <h3>Home</h3>
+      <h3><a href="{% url 'cats:home' %}">Home</a></h3>
     </div>
     <div class="tab">
-      <h3 class="selected">Profile</h3>
+      <h3 class="selected"><a href="{% url 'cats:profile' %}">Profile</a></h3>
     </div>
   </div><br><br>
 {% endblock %}
@@ -21,24 +21,18 @@
 {% block content %}
   <div class="profile-content">
     <div class="profile"></div>
-    <h3>@isaiahnavasquez</h3>
-    <p class="bio">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <h3>@{{ profile.username }}</h3>
+    <p class="bio">{{ profile.profile.bio }}</p>
     <br>
-    <a href="#" class="btn-primary">Add Post</a> &nbsp;
-    <a href="#" class="btn-secondary">Edit Profile</a>
+    {% if user.username == profile.username %}
+      <a href="{% url 'cats:create-post' %}" class="btn-primary">Add Post</a> &nbsp;
+      <a href="{% url 'cats:edit-profile' %}" class="btn-secondary">Edit Profile</a>
+    {% endif %}
     <br><br>
   </div>
   <div class="container">
-    <div class="post"></div>
-    <div class="post"></div>
-    <div class="post"></div>
-    <div class="post"></div>
-    <div class="post"></div>
-    <div class="post"></div>
-    <div class="post"></div>
-    <div class="post"></div>
-    <div class="post"></div>
-    <div class="post"></div>
-    <div class="post"></div>
+    {% for post in user.posts.all %}
+      <img class="post" src="{{ post.picture.url }}"/>
+    {% endfor %}
   </div>
 {% endblock %}

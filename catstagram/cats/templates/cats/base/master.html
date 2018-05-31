@@ -15,7 +15,7 @@
         <div class="more-profile">
           <div class="more-content">
             <p><b>@isaiahnavasquez</b></p>
-            <a href="#" class="btn-secondary" style="margin-top:10px">logout</a>
+            <a href="{% url 'cats:logout' %}" class="btn-secondary" style="margin-top:10px">logout</a>
           </div>
         </div>
       </div>
@@ -26,4 +26,5 @@
     {% block body %}{% endblock %}
 
   </body>
+  {% block script %}{% endblock %}
 </html>

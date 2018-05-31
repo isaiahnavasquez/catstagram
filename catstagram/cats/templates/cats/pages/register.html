@@ -7,25 +7,43 @@
 
 
 {% block body %}
-  <div style="width:100%;text-align:center">
-    <h2 class="title">Register</h2>
-  </div>
-  <div class="container">
-    <label for="username"><b>Username</b></label><br>
-    <input type="text" placeholder="felineconqueror" id="username"><br>
-    <label for="name"><b>Full name</b></label><br>
-    <input type="text" placeholder="Mr. Feline Jones" id="name"><br>
-    <label for="email"><b>Email Address</b></label><br>
-    <input type="text" placeholder="felinejones@gmail.com" id="email"><br>
-    <label for="bio"><b>Bio</b></label><br>
-    <input type="text" placeholder="tell me about yourself" id="bio"><br>
-    <label for="password"><b>Password</b></label><br>
-    <input type="password" placeholder="***" id="password"><br>
-    <label for="password_confirm"><b>Confirm password</b></label><br>
-    <input type="password" placeholder="***" id="password_confirm">
-    <br>
-    <div class="wrapper" style="text-align:center">
-      <a href="#" class="btn-primary">register</a>
+  <form action="{% url 'cats:register' %}" method="POST">
+    <div style="width:100%;text-align:center">
+      <h2 class="title">Register</h2>
     </div>
-  </div>
+    <div class="container">
+      {% csrf_token %}
+      <small>{{ form.username.errors }}</small><br>
+      <label for="username"><b>Username</b></label><br>
+      <!-- <input type="text" placeholder="felineconqueror" id="username" name="username"><br> -->
+      {{ form.username }}
+
+      <small>{{ form.f_name.errors }}</small><br>
+      <label for="name"><b>Full name</b></label><br>
+      <!-- <input type="text" placeholder="Mr. Feline Jones" id="name" name="f_name"><br> -->
+      {{ form.f_name }}
+
+      <small>{{ form.email.errors }}</small><br>
+      <label for="email"><b>Email Address</b></label><br>
+      <!-- <input type="text" placeholder="felinejones@gmail.com" id="email" name="email"><br> -->
+      {{ form.email }}
+
+      <small>{{ form.bio.errors }}</small><br>
+      <label for="bio"><b>Bio</b></label><br>
+      <!-- <input type="text" placeholder="tell me about yourself" id="bio" name="bio"><br> -->
+      {{ form.bio }}
+
+      <br>
+      <label for="password"><b>Password</b></label><br>
+      <input type="password" placeholder="***" id="password" name="password">
+
+      <small>{{ password_error }}</small><br>
+      <label for="password_confirm"><b>Confirm password</b></label><br>
+      <input type="password" placeholder="***" id="password_confirm" name="password_confirm">
+      <br>
+      <div class="wrapper" style="text-align:center">
+        <button type="submit" class="btn-primary">Register</button>
+      </div>
+    </div>
+  </form>
 {% endblock %}

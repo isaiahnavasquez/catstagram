@@ -7,13 +7,43 @@
 
 
 {% block body %}
-  <div class="container">
-    <div class="image"></div>
-    <div class="add-file"></div>
+  <form action="{% url 'cats:create-post' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container">
+      <img class="image" id="image"/>
+      <div class="add-file" id="addFile"></div>
 
-    <label for="caption"><h3>Caption</h3> </label>
-    <textarea name="name" id="caption" placeholder="say something about your cat..."></textarea>
-    <br><br>
-    <a href="#" class="btn-primary">Upload</a>
-  </div>
+      <label for="caption"><h3>Caption</h3> </label>
+      <textarea name="caption" id="caption" placeholder="say something about your cat..."></textarea>
+      <br><br>
+      <button type="submit" class="btn-primary">Upload</button>
+    </div>
+    <input style="display:none" type="file" id="inputFile" name="image">
+  </form>
+{% endblock %}
+
+{% block script %}
+  <script type="text/javascript">
+    addFile = document.querySelector('#addFile');
+    inputFile = document.querySelector('#inputFile');
+    imgField = document.querySelector('#image');
+
+    function readImage(input){
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          imgField.setAttribute('src', e.target.result)
+        }
+        reader.readAsDataURL(input.files[0])
+      }
+    }
+
+    addFile.addEventListener('click', function() {
+      inputFile.click()
+    })
+
+    inputFile.addEventListener('change', function() {
+      readImage(this)
+    })
+  </script>
 {% endblock %}

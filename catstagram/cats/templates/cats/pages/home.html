@@ -11,10 +11,10 @@
     <br>
     <div class="tabs">
       <div class="tab">
-        <h3 class="selected">Home</h3>
+        <h3 class="selected"><a href="{% url 'cats:home' %}">Home</a></h3>
       </div>
       <div class="tab">
-        <h3>Profile</h3>
+        <h3><a href="{% url 'cats:profile' %}">Profile</a></h3>
       </div>
     </div><br><br>
   {% endblock %}
@@ -22,40 +22,29 @@
   {% block content %}
   <div class="wrapper">
     <div class="container">
-      <div class="post">
-        <div class="post-header">
-          <div class="profile"></div>
-          <div class="username">@isaiahnavasquez</div>
+      {% for post in posts %}
+        <div class="post">
+          <div class="post-header">
+            <div class="profile"></div>
+            <div class="username">@{{ post.author.username }}</div>
+          </div>
+          <img class="post-image" src="{{ post.picture.url }}">
+          <div class="content">
+            <h4 style="margin:0">0 likes</h4>
+            <p class="caption">{{ post.caption }}</p>
+            <label for="caption">Add a comment</label>
+            <textarea name="name" id="caption"></textarea>
+          </div>
         </div>
-        <div class="post-image"></div>
-        <div class="content">
-          <h4 style="margin:0">0 likes</h4>
-          <p class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          <label for="caption">Add a comment</label>
-          <textarea name="name" id="caption"></textarea>
-        </div>
-      </div>
-      <div class="post">
-        <div class="post-header">
-          <div class="profile"></div>
-          <div class="username">@isaiahnavasquez</div>
-        </div>
-        <div class="post-image"></div>
-        <div class="content">
-          <h4 style="margin:0">0 likes</h4>
-          <p class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          <label for="caption">Add a comment</label>
-          <textarea name="name" id="caption"></textarea>
-        </div>
-      </div>
+      {% endfor %}
     </div>
     <div class="sidebar">
       <div class="profile"></div>
-      <h2 class="username">@isaiahnavasquez</h2>
-      <p class="bio">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <h2 class="username">@{{ user.username }}</h2>
+      <p class="bio">{{ user.profile.bio }}</p>
       <br>
-      <a href="#" class="btn-primary">Add Post</a>
-      <a href="#" class="btn-secondary">Edit Profile</a>
+      <a href="{% url 'cats:create-post' %}" class="btn-primary">Add Post</a>
+      <a href="{% url 'cats:edit-profile' %}" class="btn-secondary">Edit Profile</a>
     </div>
   </div>
   {% endblock %}
