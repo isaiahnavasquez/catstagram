@@ -1,16 +1,30 @@
 from django.shortcuts import render, reverse, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.generic.base import TemplateView
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.files.storage import FileSystemStorage
 from .forms import RegistrationForm
-from .models import Post, Profile
+from .models import Post, Profile, RELATIONSHIP_FOLLOWING
 
 def logoutUser(request):
     logout(request)
     return HttpResponseRedirect(reverse('cats:login'))
+
+def fireFollow(request):
+    # import pdb; pdb.set_trace()
+    user = get_object_or_404(User, username=request.GET['username'])
+    to_profile = get_object_or_404(Profile, user=user)
+    from_profile = request.user.profile
+    if to_profile in from_profile.get_following():
+        from_profile.remove_relationship(to_profile, RELATIONSHIP_FOLLOWING)
+        following = 'false'
+    else:
+        from_profile.add_relationship(to_profile, RELATIONSHIP_FOLLOWING)
+        following = 'true'
+    print(from_profile.get_following())
+    return JsonResponse({'following': following})
 
 class LoginView(TemplateView):
     template_name = 'cats/pages/index.html'
@@ -21,7 +35,7 @@ class LoginView(TemplateView):
             login(self.request, user)
             return HttpResponseRedirect(reverse('cats:home'))
         else:
-            return render(self.request, 'blogs/login.html', {
+            return render(self.request, 'cats/pages/index.html', {
                 'error_message': 'Invalid Credentials. Please Try Again.'
             })
 
@@ -38,11 +52,20 @@ class ProfileView(TemplateView):
 
     def get_context_data(self, **kwargs):
         # import pdb; pdb.set_trace()
+        context = super().get_context_data(**kwargs)
         if kwargs:
+            # viewing other profile
             username = kwargs['username']
+            user = get_object_or_404(User, username=username)
+            from_profile = get_object_or_404(Profile, user=self.request.user)
+            to_profile = get_object_or_404(Profile, user=user)
+            if to_profile in from_profile.get_following():
+                follow_text = 'Unfollow'
+            else:
+                follow_text = 'Follow'
+            context['follow_text']  = follow_text
         else:
             username = self.request.user.username
-        context = super().get_context_data(**kwargs)
         context['profile'] = get_object_or_404(User, username=username)
         return context
 
@@ -106,7 +129,6 @@ class EditProfileView(TemplateView):
         else:
             return return_error()
 
-
 class RegisterView(TemplateView):
     template_name = 'cats/pages/register.html'
 
@@ -123,11 +145,11 @@ class RegisterView(TemplateView):
             user.username = self.request.POST['username']
             user.first_name = self.request.POST['f_name']
             user.email = self.request.POST['email']
-            profile.bio = self.request.POST['bio']
+            user.password = self.request.POST['password']
             user.save()
+            profile.bio = self.request.POST['bio']
             profile.user = user
             profile.save()
-            user.password = self.request.POST['password']
             login(self.request, user)
             return HttpResponseRedirect(reverse('cats:home'))
         else:

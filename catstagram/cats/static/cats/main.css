@@ -124,3 +124,9 @@ a {
 .more-profile:hover .more-content {
   display: block;
 }
+
+.no-image {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}

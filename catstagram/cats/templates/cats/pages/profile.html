@@ -27,12 +27,52 @@
     {% if user.username == profile.username %}
       <a href="{% url 'cats:create-post' %}" class="btn-primary">Add Post</a> &nbsp;
       <a href="{% url 'cats:edit-profile' %}" class="btn-secondary">Edit Profile</a>
+    {% else %}
+      <form method="post" id="followForm" data-url="{% url 'cats:follow' %}">
+        {% csrf_token %}
+        <input name="username" type="hidden" id="username" value="{{ profile.username }}">
+      </form>
+      <a id="btnFollow">{{ follow_text }}</a> &nbsp;
     {% endif %}
     <br><br>
   </div>
   <div class="container">
-    {% for post in user.posts.all %}
+    {% for post in profile.posts.all %}
       <img class="post" src="{{ post.picture.url }}"/>
     {% endfor %}
   </div>
+{% endblock %}
+
+{% block script %}
+  <script type="text/javascript">
+      button = $('#btnFollow')
+      toggleButton();
+      function toggleButton() {
+        if (button[0].innerText == 'Follow'){
+          $('#btnFollow').addClass('btn-primary')
+          $('#btnFollow').removeClass('btn-secondary')
+        } else {
+          $('#btnFollow').addClass('btn-secondary')
+          $('#btnFollow').removeClass('btn-primary')
+        }
+      }
+      
+      form = $('#followForm');
+      $('#btnFollow').on('click', function(e) {
+        $.ajax({
+        url: form.attr('data-url'),
+        data: form.serialize(),
+        dataType: 'json',
+        success: function(data) {
+          button = $('#btnFollow')
+          if (data['following'] == 'true'){
+            button[0].innerText = 'Unfollow';
+            toggleButton();
+          } else {
+            button[0].innerText = 'Follow';
+            toggleButton();
+          }
+        }})
+      })
+  </script>
 {% endblock %}

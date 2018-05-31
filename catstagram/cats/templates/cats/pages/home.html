@@ -22,20 +22,27 @@
   {% block content %}
   <div class="wrapper">
     <div class="container">
-      {% for post in posts %}
+      {% for post in posts|slice:"::-1" %}
         <div class="post">
           <div class="post-header">
             <img class="profile" src="{{ post.author.profile.profile_picture.url }}">
-            <div class="username">@{{ post.author.username }}</div>
+            <div class="username"><a href="{% url 'cats:view_profile' post.author.username %}">@{{ post.author.username }}</a></div>
           </div>
           <img class="post-image" src="{{ post.picture.url }}">
           <div class="content">
             <h4 style="margin:0">0 likes</h4>
             <p class="caption">{{ post.caption }}</p>
-            <label for="caption">Add a comment</label>
-            <textarea name="name" id="caption"></textarea>
+            <label for="caption"><small><b>Add a comment</b></small></label>
+            <textarea name="name" id="comment"></textarea>
           </div>
         </div>
+      {% empty %}
+      <div style="text-align:center">
+        <img src="{% static 'cats/images/cat-404.png' %}" class="no-image">
+        <p>Oops. Nothing to show yet.</p>
+        <p>Explore and Follow catstagrammers to get started!</p><br>
+        <a href="#" class="btn-primary">Explore</a>
+      </div>
       {% endfor %}
     </div>
     <div class="sidebar">
