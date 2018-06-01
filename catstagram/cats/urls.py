@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import LoginView, HomeView,\
                     ProfileView, CreatePost,\
-                    RegisterView, EditProfileView
+                    RegisterView, EditProfileView,\
+                    HashtagView
 from . import views
 
 app_name = 'cats'
@@ -12,7 +13,9 @@ urlpatterns = [
     path('profile/', ProfileView.as_view(), name='profile'),
     path('profile/<str:username>', ProfileView.as_view(), name='view_profile'),
     path('edit-profile/', EditProfileView.as_view(), name='edit-profile'),
-    path('follow/', views.fireFollow, name='follow'),
     path('register/', RegisterView.as_view(), name='register'),
     path('create-post', CreatePost.as_view(), name='create-post'),
+    path('follow/', views.fireFollow, name='follow'),
+    path('add-comment/', views.addComment, name='add_comment'),
+    path('hashtag/<str:hashtag>', HashtagView.as_view(), name='hashtag'),
 ]

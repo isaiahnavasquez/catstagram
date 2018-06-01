@@ -92,11 +92,15 @@
   padding: 10px;
 }
 
-#comment {
+.comment {
   height: 20px;
   width: 365px;
   padding: 5px;
   color: gray;
   background-color: var(--container-bg);
   border-bottom: 1px solid var(--secondary-800);
+}
+
+.hashtag {
+  color: var(--secondary-800);
 }

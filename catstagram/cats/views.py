@@ -6,14 +6,13 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.files.storage import FileSystemStorage
 from .forms import RegistrationForm
-from .models import Post, Profile, RELATIONSHIP_FOLLOWING
+from .models import Post, Profile, RELATIONSHIP_FOLLOWING, Hashtag, Comment
 
 def logoutUser(request):
     logout(request)
     return HttpResponseRedirect(reverse('cats:login'))
 
 def fireFollow(request):
-    # import pdb; pdb.set_trace()
     user = get_object_or_404(User, username=request.GET['username'])
     to_profile = get_object_or_404(Profile, user=user)
     from_profile = request.user.profile
@@ -25,6 +24,35 @@ def fireFollow(request):
         following = 'true'
     print(from_profile.get_following())
     return JsonResponse({'following': following})
+
+def addComment(request):
+    user = request.user
+    post = get_object_or_404(Post, pk=request.GET['post_id'])
+    print('COMMENT: ' + str(request.GET['comment_text']))
+    print('FOR POST: ' + str(request.GET['post_id']))
+    comment = Comment(author=user,
+                    content=request.GET['comment_text'],
+                    post=post)
+    comment.save()
+    return JsonResponse({
+        'comment': comment.content,
+        'author': user.username
+    })
+
+class HashtagView(TemplateView):
+    template_name = 'cats/pages/hashtag.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            hashtag = Hashtag.objects.get(name=kwargs['hashtag'])
+            posts = hashtag.post.all()
+        except Hashtag.DoesNotExist as e:
+            posts = []
+        else:
+            context['posts'] = posts
+            context['hashtag'] = kwargs['hashtag']
+        return context
 
 class LoginView(TemplateView):
     template_name = 'cats/pages/index.html'
@@ -82,6 +110,18 @@ class CreatePost(TemplateView):
                     pub_date=pub_date,
                     picture=image)
         post.save()
+
+        # identify hashtags
+        tags = [i for i in caption.split() if i[0] == '#']
+        for tag in tags:
+            # if tag is non exisiting
+            if Hashtag.objects.filter(name=tag[1:]).count() == 0:
+                hashtag = Hashtag(name=tag[1:])
+                hashtag.save()
+            else:
+                hashtag = Hashtag.objects.get(name=tag[1:])
+            hashtag.post.add(post)
+
         return HttpResponseRedirect(reverse('cats:home'))
 
 class EditProfileView(TemplateView):

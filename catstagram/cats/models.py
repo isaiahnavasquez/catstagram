@@ -11,7 +11,7 @@ RELATIONSHIP_STATUSES = (
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.CharField(max_length=200)
-    relationships = models.ManyToManyField('self', 
+    relationships = models.ManyToManyField('self',
                                             through='Relationship',
                                             symmetrical=False,
                                             related_name='related_to')
@@ -40,7 +40,7 @@ class Profile(models.Model):
         return self.related_to.filter(
             from_people__status=status,
             from_people__to_person=self)
-            
+
     def get_following(self):
         return self.get_relationships(RELATIONSHIP_FOLLOWING)
 
@@ -71,9 +71,16 @@ class Post(models.Model):
         else:
             return self.caption
 
+class Hashtag(models.Model):
+    name = models.CharField(max_length=50)
+    post = models.ManyToManyField(Post)
+
+    def __str__(self):
+        return '#' + str(self.name)
+
 class Comment(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='posts')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     content = models.CharField(max_length=200)
 
     def __str__(self):
