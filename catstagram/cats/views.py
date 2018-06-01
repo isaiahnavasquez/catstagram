@@ -39,6 +39,43 @@ def addComment(request):
         'author': user.username
     })
 
+def search(request):
+    search_text = request.GET['search_text']
+    results = {
+        'profiles': [],
+        'posts': [],
+        'hashtags': []
+    }
+
+    profiles = []
+    posts = []
+    hashtags = []
+
+    if len(search_text) > 0:
+        profiles = Profile.objects.filter(user__username__startswith=search_text)
+        posts = Post.objects.filter(caption__icontains=search_text)
+        hashtags = Hashtag.objects.filter(name__startswith=search_text)
+
+    results['profiles'] = [{
+        'username': p.user.username,
+        'url': p.profile_picture.url
+    } for p in profiles ]
+
+    results['posts'] = [{
+        'url': p.picture.url,
+        'caption': p.caption,
+        'author': p.author.username
+    } for p in posts]
+
+    results['hashtags'] = [{
+        'name': h.name
+    } for h in hashtags]
+
+    return JsonResponse(results)
+
+class ExploreView(TemplateView):
+    template_name = 'cats/pages/explore.html'
+
 class HashtagView(TemplateView):
     template_name = 'cats/pages/hashtag.html'
 
@@ -52,6 +89,15 @@ class HashtagView(TemplateView):
         else:
             context['posts'] = posts
             context['hashtag'] = kwargs['hashtag']
+        return context
+
+class PostView(TemplateView):
+    template_name = 'cats/pages/view-post.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = get_object_or_404(Post, pk=kwargs['id'])
+        context['post'] = post
         return context
 
 class LoginView(TemplateView):
@@ -72,7 +118,20 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['posts'] = Post.objects.all()
+
+        # getting followed feed
+        posts = []
+        for p in self.request.user.profile.get_following():
+            posts += p.user.posts.all()
+
+        # adding own posts
+        posts += self.request.user.posts.all()
+
+        # putting into context
+        # reversed chronological order
+        posts.sort(key=lambda p: p.pub_date, reverse=True)
+        print(posts)
+        context['posts'] = posts
         return context
 
 class ProfileView(TemplateView):

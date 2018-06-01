@@ -1,0 +1,155 @@
+{% extends 'cats/base/master.html' %}
+
+{% block head %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'cats/pages/home.css' %}">
+  <link rel="stylesheet" href="{% static 'cats/pages/explore.css' %}">
+{% endblock %}
+
+{% block body %}
+
+  {% block tabs %}
+    <br>
+    <div class="tabs">
+      <div class="tab">
+        <h3><a href="{% url 'cats:home' %}">Home</a></h3>
+      </div>
+      <div class="tab">
+        <h3><a href="{% url 'cats:profile' %}">Profile</a></h3>
+      </div>
+      <div class="tab">
+        <h3 class="selected"><a href="{% url 'cats:explore' %}">Explore</a></h3>
+      </div>
+    </div><br><br>
+  {% endblock %}
+
+  {% block content %}
+  <h2 class="title">Explore the world of felines</h2>
+  <div class="container">
+    <form method="post" id="searchForm" data-url="{% url 'cats:search' %}">
+      <input type="text" name="search_text" id="searchText">
+    </form>
+  </div>
+
+  <br>
+  <h2 id="hashtag_title">Hashtags</h2>
+  <div class="hashtag-result" id="hashtag_result">
+    <!-- <h3><a href="#">#Hashtag</a> </h3> -->
+  </div>
+
+  <br>
+  <h2 id="profiles_title">Users</h2>
+  <div class="result" id="profiles_result">
+    <!-- <div class="user">
+      <img class="image">
+      <div class="username">@ariana</div>
+    </div> -->
+  </div>
+
+  <br>
+  <h2 id="post_title">Posts</h2>
+  <div class="result" id="post_result">
+    <!-- <div class="post">
+      <div class="image"></div>
+      <div class="username">@ariana</div>
+    </div> -->
+  </div>
+  {% endblock %}
+
+{% endblock %}
+
+{% block script %}
+  <script type="text/javascript">
+    form = $('#searchForm');
+    hashtag_title = $('#hashtag_title')
+    hashtag_result = $('#hashtag_result')
+    hashtag_title.hide()
+    hashtag_result.hide()
+
+    profiles_title = $('#profiles_title')
+    profiles_result = $('#profiles_result')
+    profiles_title.hide()
+    profiles_result.hide()
+
+    post_title = $('#post_title')
+    post_result = $('#post_result')
+    post_title.hide()
+    post_result.hide()
+
+    $('#searchText').bind('input', function() {
+      text = $(this).val();
+
+      $.ajax({
+        url: form.attr('data-url'),
+        data: form.serialize(),
+        dataType: 'json',
+        success: function(data) {
+
+          // hashtag
+          hashtags = data['hashtags']
+          if (hashtags.length > 0) {
+            hashtag_title.show()
+            hashtag_result.show()
+            hashtag_result.empty()
+            for (index in hashtags) {
+              name = hashtags[index].name
+              url = "{% url 'cats:hashtag' 'hello' %}"
+              url = url.replace('hello', name)
+              hashtag_result.append("<h3><a href='" + url + "'>#" + name + "</a> </h3>")
+            }
+          } else {
+            hashtag_title.hide()
+            hashtag_result.hide()
+          }
+
+          // profile
+          profiles = data['profiles']
+          if (profiles.length > 0) {
+            profiles_title.show()
+            profiles_result.show()
+            profiles_result.empty()
+            for (index in profiles) {
+              name = profiles[index].username
+              imageURL = profiles[index].url
+              url = "{% url 'cats:view_profile' 'hello' %}"
+              url = url.replace('hello', name)
+              profiles_result.append(
+                "<div class='user'>" +
+                  "<img class='image' src='" + imageURL + "'>" +
+                  "<div class='username'><a href='" + url + "'>@" + name + "</a></div>" +
+                "</div>"
+              )
+            }
+          } else {
+            profiles_title.hide()
+            profiles_result.hide()
+          }
+
+          // posts
+          posts = data['posts']
+          if (posts.length > 0) {
+            post_title.show()
+            post_result.show()
+            post_result.empty()
+            for (index in posts) {
+              url = posts[index].url
+              caption = posts[index].caption
+              author = posts[index].author
+              post_result.append(
+                "<div class='post'>" +
+                  "<img class='image' src='" + url + "'/>" +
+                  "<div class='username'>@" + author + "</div>" +
+                  "<div class='username'>" + caption + "</div>" +
+                "</div>"
+              )
+            }
+          } else {
+            post_title.hide()
+            post_result.hide()
+          }
+
+        }
+      })
+    })
+  </script>
+{% endblock %}

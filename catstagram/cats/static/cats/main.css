@@ -93,8 +93,11 @@ a {
   font-family: var(--font-primary);
   margin: 0;
   padding: 10px;
-  color: var(--primary-800);
   text-align: center;
+}
+
+.header a {
+  color: var(--primary-800);
 }
 
 .more-profile {

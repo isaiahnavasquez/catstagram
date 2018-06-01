@@ -1,0 +1,74 @@
+:root {
+  text-align: center;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  color: var(--secondary-800)
+}
+
+#searchText {
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  padding: 20px;
+  font-size: 30px;
+  color: var(--primary-800);
+  font-family: var(--font-primary);
+  box-shadow: var(--shadow-1);
+  border-radius: 5px;
+}
+
+.result {
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.hashtag-result {
+  text-align: center;
+}
+
+.hashtag-result h3 a {
+  color: var(--secondary-800);
+}
+
+.user {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px 0 0 20px;
+}
+
+.user .image {
+  width: 100px;
+  height: 100px;
+  background-color: black;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.post {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px 0 0 20px;
+}
+
+.post .image {
+  width: 100px;
+  height: 100px;
+  background-color: black;
+  margin-left: auto;
+  margin-right: auto;
+}

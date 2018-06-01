@@ -66,10 +66,7 @@ class Post(models.Model):
     picture = models.ImageField(upload_to=user_directory_path)
 
     def __str__(self):
-        if len(self.caption) > 15:
-            return self.caption[15]
-        else:
-            return self.caption
+        return str(self.pub_date) + self.caption
 
 class Hashtag(models.Model):
     name = models.CharField(max_length=50)
