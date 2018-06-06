@@ -6,11 +6,17 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.files.storage import FileSystemStorage
 from .forms import RegistrationForm
-from .models import Post, Profile, RELATIONSHIP_FOLLOWING, Hashtag, Comment
+from .models import Post, Profile, RELATIONSHIP_FOLLOWING, Hashtag, Comment, Like
 
 def logoutUser(request):
     logout(request)
     return HttpResponseRedirect(reverse('cats:login'))
+
+def toggle_like(request):
+    post_id = request.POST['post_id']
+    post = get_object_or_404(Post, pk=post_id)
+    response =  post.toggle_like(request.user)
+    return JsonResponse({'response': str(response).lower()})
 
 def fireFollow(request):
     user = get_object_or_404(User, username=request.GET['username'])

@@ -62,11 +62,44 @@ class Post(models.Model):
     caption = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
     author = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
-    likers = models.ManyToManyField(User, blank=True)
     picture = models.ImageField(upload_to=user_directory_path)
+
+    @property
+    def likers(self):
+        """Gets the ids of user that liked this post,
+        used to determine in the template
+        if a specific user is involved
+        """
+        likes = self.likes.all().values()
+        users = [x['user_id'] for x in likes]
+        return users
+
+    def is_liked_by(self, user):
+        """Checks if post is liked by a certain user"""
+        output = Like.objects.filter(user=user, post=self)
+        return True if output.count() == 1 else False
+
+    def toggle_like(self, user):
+        """Toggles like from user
+        returns True if post is liked,
+        returns False if unliked
+        """
+        if self.is_liked_by(user):
+            Like.objects.get(post=self, user=user).delete()
+            return False
+        else:
+            Like(post=self, user=user).save()
+            return True
 
     def __str__(self):
         return str(self.pub_date) + self.caption
+
+class Like(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'@{self.user.username} to {self.post.id}'
 
 class Hashtag(models.Model):
     name = models.CharField(max_length=50)

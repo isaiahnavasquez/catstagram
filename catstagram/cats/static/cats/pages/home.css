@@ -101,6 +101,7 @@
   border-bottom: 1px solid var(--secondary-800);
 }
 
-.hashtag {
-  color: var(--secondary-800);
+#like {
+  color: red;
+  cursor: pointer;
 }

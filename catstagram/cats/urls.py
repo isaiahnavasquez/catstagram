@@ -21,4 +21,5 @@ urlpatterns = [
     path('add-comment/', views.addComment, name='add_comment'),
     path('explore/', ExploreView.as_view(), name='explore'),
     path('search/', views.search, name='search'),
+    path('toggle-like/', views.toggle_like, name='toggle-like'),
 ]

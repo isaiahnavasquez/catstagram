@@ -7,6 +7,8 @@
 
 {% block body %}
 
+  {% csrf_token %}
+
   {% block tabs %}
     <br>
     <div class="tabs">
@@ -33,7 +35,16 @@
           </div>
           <img class="post-image" src="{{ post.picture.url }}">
           <div class="content">
-            <h4 style="margin:0">0 likes &nbsp;&nbsp; - <small>{{ post.pub_date }}</small> </h4>
+            <i class="material-icons" id="like" data-post-id="{{ post.id }}" onclick="toggleLike(event)" data-url="{% url 'cats:toggle-like' %}">
+              {% if user.id in post.likers %}
+              favorite
+              {% else %}
+              favorite_border
+              {% endif %}
+            </i>
+            <h4 style="margin:0">
+              <span id="like_count_{{ post.id }}">{{ post.likers|length }}</span> likes &nbsp;&nbsp; -
+              <small>{{ post.pub_date }}</small> </h4>
             <p class="caption" id="caption_{{ post.author.username }}_{{ post.id }}">
               <b>@{{ post.author.username }}</b>
               {{ post.caption }}
@@ -118,5 +129,33 @@
         })
       });
     {% endfor %}
+
+    $('.like').on('mousedown', function(e){
+      like = $('.like');
+    });
+
+    function toggleLike(e){
+      var csrftoken = $("[name='csrfmiddlewaretoken']").val()
+      post_id = e.srcElement.dataset.postId;
+      data_url = e.srcElement.dataset.url;
+      $.ajax({
+        url: data_url,
+        method: 'post',
+        headers: { 'X-CSRFToken': csrftoken },
+        data: { 'post_id': post_id },
+        dataType: 'json',
+        success: function(data) {
+          e.srcElement.innerHTML = data['response'] == 'true'
+                                  ? 'favorite'
+                                  : 'favorite_border';
+          likes = +$('#like_count_' + post_id).html();
+          if (data['response'] == 'true'){
+            $('#like_count_' + post_id).html(likes + 1);
+          } else {
+            $('#like_count_' + post_id).html(likes - 1);
+          }
+        }
+      })
+    }
   </script>
 {% endblock %}
