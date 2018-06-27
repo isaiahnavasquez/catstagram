@@ -2,8 +2,9 @@
 <html lang="en" dir="ltr">
   <head>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'cats/main.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'cats/main.css' %}">
     <meta charset="utf-8">
     <title>Catstagram</title>
     {% block head %}{% endblock %}
@@ -12,7 +13,7 @@
 
     {% block header %}
       <div class="header">
-        <h1 class="title">Catstagram</h1>
+        <h1 class="title"><a href="{% url 'cats:home' %}">Catstagram</a></h1>
         <div class="more-profile" style="background:url('{{ user.profile.profile_picture.url }}') top center / 50px 50px">
           <div class="more-content">
             <p><b>@isaiahnavasquez</b></p>
@@ -21,7 +22,6 @@
         </div>
       </div>
       <div style="height:65px;width:100%"></div>
-
     {% endblock %}
 
     {% block body %}{% endblock %}

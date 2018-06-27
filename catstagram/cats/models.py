@@ -11,7 +11,7 @@ RELATIONSHIP_STATUSES = (
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.CharField(max_length=200)
-    relationships = models.ManyToManyField('self', 
+    relationships = models.ManyToManyField('self',
                                             through='Relationship',
                                             symmetrical=False,
                                             related_name='related_to')
@@ -40,7 +40,7 @@ class Profile(models.Model):
         return self.related_to.filter(
             from_people__status=status,
             from_people__to_person=self)
-            
+
     def get_following(self):
         return self.get_relationships(RELATIONSHIP_FOLLOWING)
 
@@ -62,18 +62,55 @@ class Post(models.Model):
     caption = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
     author = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
-    likers = models.ManyToManyField(User, blank=True)
     picture = models.ImageField(upload_to=user_directory_path)
 
-    def __str__(self):
-        if len(self.caption) > 15:
-            return self.caption[15]
+    @property
+    def likers(self):
+        """Gets the ids of user that liked this post,
+        used to determine in the template
+        if a specific user is involved
+        """
+        likes = self.likes.all().values()
+        users = [x['user_id'] for x in likes]
+        return users
+
+    def is_liked_by(self, user):
+        """Checks if post is liked by a certain user"""
+        output = Like.objects.filter(user=user, post=self)
+        return True if output.count() == 1 else False
+
+    def toggle_like(self, user):
+        """Toggles like from user
+        returns True if post is liked,
+        returns False if unliked
+        """
+        if self.is_liked_by(user):
+            Like.objects.get(post=self, user=user).delete()
+            return False
         else:
-            return self.caption
+            Like(post=self, user=user).save()
+            return True
+
+    def __str__(self):
+        return str(self.pub_date) + self.caption
+
+class Like(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'@{self.user.username} to {self.post.id}'
+
+class Hashtag(models.Model):
+    name = models.CharField(max_length=50)
+    post = models.ManyToManyField(Post)
+
+    def __str__(self):
+        return '#' + str(self.name)
 
 class Comment(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='posts')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     content = models.CharField(max_length=200)
 
     def __str__(self):

@@ -1,0 +1,22 @@
+{% extends 'cats/base/master.html' %}
+
+{% block head %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'cats/pages/hashtag.css' %}">
+{% endblock %}
+
+
+{% block body %}
+  <div class="title">
+    <br>
+    <h1>#{{ hashtag }}</h1>
+  </div>
+
+  <div class="container">
+    {% for post in posts %}
+      <img class="post" src="{{ post.picture.url }}">
+    {% empty %}
+    {% endfor %}
+  </div>
+
+{% endblock %}
